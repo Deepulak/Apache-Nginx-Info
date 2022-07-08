@@ -1,0 +1,125 @@
+https://null-byte.wonderhowto.com/how-to/scan-for-vulnerabilities-any-website-using-nikto-0151729/
+
+Before attacking any website, a hacker or penetration tester will first compile a list of target surfaces. After they've used some good recon and found the right places to point their scope at, they'll use a web server scanning tool such as Nikto for hunting down vulnerabilities that could be potential attack vectors.
+
+Nikto is a simple, open-source web server scanner that examines a website and reports back vulnerabilities that it found which could be used to exploit or hack the site. Also, it's one of the most widely used website vulnerabilities tools in the industry, and in many circles, considered the industry standard.
+
+Although this tool is extremely effective, it's not stealthy at all. Any site with an intrusion-detection system or other security measures in place will detect that it's being scanned. Initially designed for security testing, stealth was never a concern.
+
+
+The Right Way to Use Nikto
+
+If you just run Nikto by itself on a targeted website, you may not know what to do with the information from the scan. Nikto is actually more like a laser pointer to call in a much larger strike, and you'll see how that plays out in a little bit.
+
+First, let's talk about the target surface. This is pretty much anywhere a hacker will attempt to attack and could include things such as network-exposed printers and a web server. When we get to using Nikto later, we'll need to provide it with one of three different types of information: an IP address for a local service, a web domain to attack, or an SSL/HTTPS website.
+
+Before diving right into a scan with Nikto, it's better to do some additional reconnaissance using an open-source intelligence tool such as Maltego. Tools like this can help build a profile and a more focused list of available targets that should be concentrated on. Once that's done, Nikto can be used to hone in on potential vulnerabilities for targets on the list.
+
+
+If lucky, a vulnerability with a weaponized exploit will be found, meaning there's a tool out there already to take advantage of the weakness. With the appropriate tool, which will automatically exploit the vulnerability, a hacker can gain access to the target to perform any number of behind-the-scenes attacks, like adding code to perform a malicious activity.
+
+
+Install Nikto
+
+If you're running Kali Linux, Nikto comes preinstalled, so you don't have to download or install anything. It'll be located in the "Vulnerability Analysis" category. If you don't have it for some reason, you can get Nikto from its GitHub or just use the apt install command.
+
+
+apt install nikto
+
+
+Get to Know Nikto
+
+Before you dive into scanning web servers with Nikto, lets you use the -Help option to see everything that can be done inside Nikto.
+
+
+nikto -help
+
+
+Use the Basic Syntax
+
+As you can see from the previous step, Nikto has many options, but for our purposes, we'll stick to the basic syntax as follows. We'll substitute the <IP or hostname> with the actual IP address or hostname sans angle brackets.
+
+nikto -h IP Address
+
+
+However, Nikto is capable of doing a scan that can go after SSL and port 443, the port that HTTPS websites use (HTTP uses port 80 by default). So we're not just limited to scanning old sites, we can do vulnerability assessments on sites that use SSL, which is pretty much a requirement these days to be indexed in search results.
+
+If we know it's an SSL site that we're targeting, we can specify it in Nikto to save some time on the scan by adding -ssl to the end of the command.
+
+nikto -h IP Address -ssl
+
+
+Scan an SSL-Enabled Website
+
+For example, let's start with scanning pbs.org to see some of the types of information that a Nikto scan will show. After it connects to port 443, we see that there's some useful information about the cipher and a list of other details like that the server is Nginx, but there's not a whole lot of interesting data here for us.
+
+
+Scan an IP Address
+
+Now that we performed a quick scan of a website, let's try using Nikto on a local network to find embedded servers such as a login page for a router or an HTTP service on another machine that's just a server with no website. To get started, let's find our IP address using ifconfig.
+
+
+ifconfig
+
+
+The IP address we want is the "inet" one. Then we can run ipcalc on it to get our network range. If you don't have ipcalc, you can install it with apt install ipcalc, then try again. The range will be next to "Network," in my case, 192.168.0.0/24.
+
+
+ipcalc IP Address
+
+
+Now, we're going to want to run Nmap to find services running in the network range. Let's scan port 80 with our range and tack on -oG (grepable output) to extract only the hosts that are up and running, i.e., the ones responding indicating that port 80 is open. Then we'll save everything to a file, which I'm naming nullbyte.txt, but could be named anything.
+
+
+nmap -p 80 IP Address/24 -oG scan_test.txt
+
+
+There's a nice little trick that can send all the up hosts directly to Nikto for scanning. We use cat to read the output stored in our nullbyte.txt document (or whatever you named it). Then, there's awk, a Linux tool that will help search for the following pattern, where Up means the host is up and print $2 means to print out the second word in that line for each, i.e., just the IP address. Then, we send that data to a new file called targetIP.txt (or whatever you'd like to name it).
+
+
+cat scan_test.txt | awk '/Up$/{print $2}' | cat >> targetIP.txt
+
+
+We can now view the contents of our new file with cat to see all the IP addresses that have port 80 open.
+
+cat targetIP.txt
+
+
+This is perfect for Nikto because it can easily interpret files like this. So we can send this output over to Nikto with the following command.
+
+
+nikto -h targetIP.txt
+
+The results will look similar to the once we got when performing the SSL scan
+
+
+Scan an HTTP Website
+
+We've scanned a secure website and an IP address on a local network, and now it's time to go after an unsecured web domain using port 80. For this example, I'm using "afl.com.au,' which was not using SSL at the time I performed this scan.
+
+
+nikto -h www.afl.com.au
+
+
+Above, we can see that there's a Varnish server and some headers that help indicate how the website is configured. However, the juicier stuff is the directories found which can help snag configuration files that may contain credentials or other things that have been misconfigured and left unintentionally accessible.
+
+The items with the OSVDB prefix are vulnerabilities reported in the Open Source Vulnerability Database (a site that shut down in 2016). It's similar to other vulnerability databases such as SecurityFocus, Microsoft's Technet, and Common Vulnerabilities and Exposures. I prefer to check out the National Vulnerability Database.
+
+While there aren't any major things that can be exploited from this scan, if there was, you can use the CVE reference tool to translate the OSVDB identifier to a CVE entry, so you can use one of the other sites above to read more about the vulnerability.
+
+
+Let's say we found some worth exploring, such as CVE-2018-10933, a Libssh vulnerability we covered in detail previously. The CVE holds information about what can be exploited, what the severity score is (such as critical), and some other information that can help determine an attack vector. If it something worth using, you can search Metasploit, as someone has already likely developed a weaponized module for it to exploit it more easily.
+
+
+Pair Scans with Metasploit
+
+One of the best things about Nikto is that you can actually export information into a format that Metasploit can read when you're performing a scan. To do, just use the commands above to perform the scan, but appending -Format msf+ to the end of it. The format can help us quickly pair data retrieved with a weaponized exploit.
+
+
+
+nikto -h IP Address -Format msf+
+
+
+So, in this guide, we went from determining the target's surface area to finding a vulnerability and then pairing it with a weaponized exploit so we don't have to do all of the work. Since Nikto is not a stealthy tool, it's wise to perform these types of scans from a VPN, through Tor, or another type of service so that your real IP address is not flagged for suspicious behavior.
+
+

